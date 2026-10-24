@@ -1,0 +1,62 @@
+{
+    "name": "absolutoffice/xcurl",
+    "description": "HTTPS transport and policy client with cURL, PHP streams, and direct TLS socket capability fallback.",
+    "type": "library",
+    "license": "LGPL-3.0-only",
+    "require": {
+        "php": "^8.5"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95.27",
+        "phpdocumentor/shim": "^3.10",
+        "phpstan/phpstan": "^2.3",
+        "phpunit/phpunit": "^13.4"
+    },
+    "suggest": {
+        "ext-curl": "Preferred runtime transport when available.",
+        "ext-openssl": "Required by the direct TLS socket fallback and normally used by HTTPS streams."
+    },
+    "autoload": {
+        "psr-4": {
+            "AbsolutOffice\\XCurl\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AbsolutOffice\\XCurl\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "php tests/regression.php"
+    },
+    "config": {
+        "platform": {
+            "php": "8.5.11"
+        },
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpdocumentor/shim": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "keywords": [
+        "http",
+        "https",
+        "curl",
+        "tls",
+        "transport"
+    ],
+    "authors": [
+        {
+            "name": "Absolut Office"
+        }
+    ],
+    "archive": {
+        "exclude": [
+            "/.gitignore",
+            "/composer.lock",
+            "/vendor"
+        ]
+    }
+}

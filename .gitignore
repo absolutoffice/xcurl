@@ -1,0 +1,16 @@
+# Local indexes and development artifacts
+.atl/
+.codegraph/
+vendor/
+var/
+.phpunit.cache/
+.php-cs-fixer.cache
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*private*.pem
+*.key
+*.p12
+*.pfx
