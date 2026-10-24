@@ -4,7 +4,15 @@ xCurl is an HTTPS-only transport library for PHP **^8.5.12** projects. It select
 
 ## Install and try it
 
-Prefer Composer and load its generated autoloader. Start with the [current installation guide](docs/INSTALLATION.md): it covers a local path repository now, GitHub VCS installation after delivery, and stable Packagist installation only after registration and a supported Git tag. Registry availability is not established by this checkout.
+Prefer Composer and load its generated autoloader. The stable release target is **v1.1.0**; see the [release notes](docs/releases/1.1.0.md). Once maintainers publish that Git tag, install it directly through GitHub VCS in a consumer project:
+
+```bash
+composer config repositories.xcurl vcs https://github.com/absolutoffice/xcurl.git
+composer require absolutoffice/xcurl:1.1.0 --no-plugins --no-scripts
+composer check-platform-reqs --no-dev
+```
+
+The [installation guide](docs/INSTALLATION.md) also covers verified local path installation and the `dev-main` development option. Without a VCS repository override, `composer require absolutoffice/xcurl:^1.1` is valid **only after Packagist has indexed the release**. This checkout does not establish tag publication, indexing, or successful remote installation.
 
 ```php
 require_once __DIR__ . '/vendor/autoload.php';

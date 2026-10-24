@@ -43,28 +43,36 @@ $transport = \AbsolutOffice\XCurl\HttpTransportFactory::create();
 
 The factory needs an available HTTPS backend: optional cURL, PHP HTTPS streams, or TLS/OpenSSL sockets. Composer installation alone does not prove network/TLS capability.
 
-## GitHub VCS: only after candidate delivery
+## Stable v1.1.0 through GitHub VCS: after tag publication
 
-Once the intended candidate is available on GitHub's `main` branch, these commands can be run in a consumer project:
+Once maintainers publish the `v1.1.0` Git tag, run these commands in a consumer project to select that stable version without Packagist registration:
 
 ```bash
 composer config repositories.xcurl vcs https://github.com/absolutoffice/xcurl.git
-composer require absolutoffice/xcurl:dev-main --no-plugins --no-scripts
+composer require absolutoffice/xcurl:1.1.0 --no-plugins --no-scripts
 composer check-platform-reqs --no-dev
 ```
 
-Until then, `dev-main` may resolve older remote contents, not this local feature branch. Remove or replace a local path repository first so it cannot shadow the VCS repository. This VCS route does not require Packagist registration and has not been remotely installed by the local smoke test.
+Remove or replace a local path repository first so it cannot shadow the VCS repository. The release tag is not proven published by these local checks, and this VCS route has not been remotely installed. See [1.1.0 release notes](releases/1.1.0.md).
+
+For ongoing **development** rather than a stable release, use the same VCS repository with:
+
+```bash
+composer require absolutoffice/xcurl:dev-main --no-plugins --no-scripts
+```
+
+`dev-main` tracks the remote `main` branch, which may differ from this checkout; it is not a substitute for the stable tag.
 
 ## Stable Packagist: future distribution
 
-Only **after** maintainers register `absolutoffice/xcurl` on Packagist and publish a supported stable Git tag, a consumer can use:
+Only **after** maintainers publish `v1.1.0` and Packagist has registered the package and indexed that release, a consumer without the VCS repository override can use:
 
 ```bash
-composer require absolutoffice/xcurl --no-plugins --no-scripts
+composer require absolutoffice/xcurl:^1.1 --no-plugins --no-scripts
 composer check-platform-reqs --no-dev
 ```
 
-Neither the historical `VERSION` file (`1.0.1`) nor the changelog creates stable Composer metadata. Composer versions come from VCS branches/tags; the library deliberately has no root `version` field. Registration and a suitable tag must be verified before advertising a stable install.
+The root `VERSION` file now records `1.1.0`, but neither it nor the changelog creates stable Composer metadata. Composer versions come from VCS branches/tags; the library deliberately has no root `version` field. Tag publication and Packagist indexing must be confirmed separately; these checks establish neither.
 
 ## Consumers versus contributors
 
