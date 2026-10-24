@@ -3,8 +3,13 @@
     "description": "HTTPS transport and policy client with cURL, PHP streams, and direct TLS socket capability fallback.",
     "type": "library",
     "license": "LGPL-3.0-only",
+    "homepage": "https://github.com/absolutoffice/xcurl",
+    "support": {
+        "source": "https://github.com/absolutoffice/xcurl",
+        "issues": "https://github.com/absolutoffice/xcurl/issues"
+    },
     "require": {
-        "php": "^8.5"
+        "php": "^8.5.12"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.95.27",
@@ -31,7 +36,7 @@
     },
     "config": {
         "platform": {
-            "php": "8.5.11"
+            "php": "8.5.12"
         },
         "sort-packages": true,
         "allow-plugins": {
@@ -55,8 +60,26 @@
     "archive": {
         "exclude": [
             "/.gitignore",
+            "/.atl",
+            "/.codegraph",
+            "/odd",
             "/composer.lock",
-            "/vendor"
+            "/vendor",
+            "/var",
+            "/.phpunit.cache",
+            "/.php-cs-fixer.cache",
+            "/auth.json",
+            ".env*",
+            "*.pdf",
+            "*.PDF",
+            "*.pem",
+            "*.key",
+            "*.p12",
+            "*.pfx",
+            "id_rsa*",
+            "id_dsa*",
+            "id_ecdsa*",
+            "id_ed25519*"
         ]
     }
 }

@@ -1,13 +1,13 @@
 # xCurl
 
-xCurl is an HTTPS-only transport library for PHP 8.5 projects. It selects an available backend (cURL, PHP HTTPS streams, or a direct TLS socket) and offers an optional client for redirects, retries, and deadlines. TLS peer and hostname verification remain enabled.
+xCurl is an HTTPS-only transport library for PHP **^8.5.12** projects. It selects an available backend (cURL, PHP HTTPS streams, or a direct TLS socket) and offers an optional client for redirects, retries, and deadlines. TLS peer and hostname verification remain enabled.
 
 ## Install and try it
 
-For a local checkout or standalone deployment, keep `autoload.php` alongside `src/` and load it from your application:
+Prefer Composer and load its generated autoloader. Start with the [current installation guide](docs/INSTALLATION.md): it covers a local path repository now, GitHub VCS installation after delivery, and stable Packagist installation only after registration and a supported Git tag. Registry availability is not established by this checkout.
 
 ```php
-require_once __DIR__ . '/xcurl/autoload.php'; // Adjust to your checkout path.
+require_once __DIR__ . '/vendor/autoload.php';
 
 use AbsolutOffice\XCurl\HttpTransportFactory;
 
@@ -16,7 +16,9 @@ $response = $transport->request('GET', 'https://example.com/', [], 30);
 echo $response->statusCode, "\n";
 ```
 
-This repository contains Composer package metadata and PSR-4 autoloading under `AbsolutOffice\XCurl\`. A consumer can add this checkout as a local Composer path repository; package registry availability has not been verified. The runtime has no Composer dependency beyond PHP itself. cURL is optional; HTTPS streams require the HTTPS wrapper, and the direct socket requires TLS/OpenSSL support.
+Composer provides PSR-4 autoloading under `AbsolutOffice\XCurl\`. The runtime has no Composer dependency beyond PHP itself; contributor tools are not consumer dependencies. cURL is optional; HTTPS streams require the HTTPS wrapper, and the direct socket requires TLS/OpenSSL support.
+
+For standalone deployment instead, keep `autoload.php` alongside `src/` and replace the require above with `require_once __DIR__ . '/xcurl/autoload.php';` (adjust the checkout path). The same PHP minimum applies.
 
 ## Redirects and downloads
 
@@ -42,7 +44,7 @@ The factory selects cURL, then HTTPS streams, then the direct TLS socket based o
 
 ## Check and reference
 
-Run `php tests/regression.php` for dependency-free policy and socket-connector checks, and `find src tests -name '*.php' -print0 | xargs -0 -n1 php -l` for PHP syntax. These checks do not establish complete TLS or cURL/streams integration coverage; no full QA suite is bundled in this checkout.
+Run `composer test` (or `php tests/regression.php`) for dependency-free policy and socket-connector checks, `php tests/composer-consumer.php` for isolated Composer installation/archive checks, and `find src tests -name '*.php' -print0 | xargs -0 -n1 php -l` for PHP syntax. These checks do not establish complete TLS or cURL/streams integration coverage; no full QA suite is bundled in this checkout.
 
 See [documentation index](docs/README.md) for historical reference material. For API details, see [1.0.0 reference](docs/reference/1.0.0/API-1.0.0.md); treat historical release and QA statements there as archival, not as verification of this snapshot.
 

@@ -1,0 +1,23 @@
+# Keep runtime, licenses, documentation and executable test scripts in exports.
+# Composer path mirrors use export-ignore, not composer.json archive.exclude.
+/.gitignore export-ignore
+/.atl export-ignore
+/.codegraph export-ignore
+/odd export-ignore
+/composer.lock export-ignore
+/vendor export-ignore
+/var export-ignore
+/.phpunit.cache export-ignore
+/.php-cs-fixer.cache export-ignore
+/auth.json export-ignore
+.env* export-ignore
+*.pdf export-ignore
+*.PDF export-ignore
+*.pem export-ignore
+*.key export-ignore
+*.p12 export-ignore
+*.pfx export-ignore
+id_rsa* export-ignore
+id_dsa* export-ignore
+id_ecdsa* export-ignore
+id_ed25519* export-ignore

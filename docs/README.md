@@ -1,6 +1,6 @@
 # Documentation
 
-Start with the [project README](../README.md) for installation, the current API example, transport selection, and the available regression command.
+Start with the [current installation guide](INSTALLATION.md) for PHP ^8.5.12, local Composer installation, conditional GitHub/Packagist routes and reproducible validation. The [project README](../README.md) covers the current API example, transport selection and standalone fallback.
 
 ## Reference material
 

@@ -2,6 +2,11 @@
 
 ## Current checkout (unreleased)
 
+- Raised the supported consumer PHP requirement to `^8.5.12` and the contributor Composer platform baseline to `8.5.12`; runtime code and standalone autoloading are unchanged.
+- Prepared Composer homepage/support metadata and aligned archive/export exclusions for local indexes, planning files, PDFs, caches, environment files and key material, retaining runtime, license texts and test scripts.
+- Added isolated mirrored Composer consumer checks for PHP 8.5.11 rejection and 8.5.12 success, installed-autoload public API smoke coverage and actual ZIP content validation.
+- Added a current Composer-first installation guide distinguishing verified local installation, post-delivery GitHub VCS usage and future stable Packagist availability; no registration, tag or release is implied.
+
 - Prevented client cleanup from deleting pre-existing download targets: existing targets are refused before the first attempt, and only completed attempts that explicitly report exclusive target creation may be cleaned up on redirect/retry.
 - Added a dependency-free regression runner for target ownership, no-body continuation, and socket transport behavior. This checkout does not include the historical full QA tooling referenced below; prior release validation claims are historical, not evidence for this snapshot.
 
