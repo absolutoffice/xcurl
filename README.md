@@ -1,18 +1,81 @@
 # xCurl
 
-xCurl is an HTTPS-only transport library for PHP **^8.5.12** projects. It selects an available backend (cURL, PHP HTTPS streams, or a direct TLS socket) and offers an optional client for redirects, retries, and deadlines. TLS peer and hostname verification remain enabled.
+### English
 
-## Install and try it
+`xCurl` is an Absolut Office HTTPS transport and policy package for generic PHP projects.
 
-Prefer Composer and load its generated autoloader. The stable release target is **v1.1.0**; see the [release notes](docs/releases/1.1.0.md). Once maintainers publish that Git tag, install it directly through GitHub VCS in a consumer project:
+It was created for environments where hosting providers, ISPs, proxies, firewalls, or server configurations restrict or disable parts of the standard PHP networking stack.
+
+Its purpose is to provide a resilient HTTPS transport layer that can progressively select among supported connection backends according to the capabilities available at runtime. Rather than depending on a single networking mechanism, `xCurl` can use cURL, PHP HTTPS streams, or a direct TLS socket when the preferred backend is not available.
+
+The goal is simple: make outbound HTTPS communication more reliable across constrained or inconsistently configured PHP environments, while preserving explicit transport policies, TLS verification, and security controls.
+
+More documentation: xCurl 1.1.0 Practical Manual
+---
+
+### Español
+
+`xCurl` es un paquete de Absolut Office para transporte HTTPS y gestión de políticas, diseñado para proyectos PHP genéricos.
+
+Nace para aquellos entornos en los que proveedores de hosting, ISP, proxies, firewalls o determinadas configuraciones del servidor limitan o deshabilitan partes de la conectividad estándar disponible en PHP.
+
+Su propósito es proporcionar una capa de transporte HTTPS resiliente, capaz de seleccionar progresivamente distintos backends de conexión compatibles según las capacidades disponibles en tiempo de ejecución. En lugar de depender de un único mecanismo de red, `xCurl` puede utilizar cURL, streams HTTPS de PHP o un socket TLS directo cuando el backend preferido no está disponible.
+
+El objetivo es sencillo: hacer más fiable la comunicación HTTPS saliente en entornos PHP restringidos o configurados de forma desigual, manteniendo políticas de transporte explícitas, verificación TLS y controles de seguridad.
+
+Más documentación: Manual práctico de xCurl 1.1.0
+---
+
+### Português
+
+`xCurl` é um pacote da Absolut Office para transporte HTTPS e gestão de políticas, destinado a projetos PHP genéricos.
+
+Foi criado para ambientes em que provedores de alojamento, ISPs, proxies, firewalls ou determinadas configurações do servidor limitam ou desativam partes da conectividade padrão disponível no PHP.
+
+O seu objetivo é fornecer uma camada de transporte HTTPS resiliente, capaz de selecionar progressivamente diferentes backends de ligação compatíveis de acordo com as capacidades disponíveis em tempo de execução. Em vez de depender de um único mecanismo de rede, o `xCurl` pode utilizar cURL, streams HTTPS do PHP ou um socket TLS direto quando o backend preferencial não está disponível.
+
+O objetivo é simples: tornar a comunicação HTTPS de saída mais fiável em ambientes PHP restritos ou configurados de forma inconsistente, mantendo políticas de transporte explícitas, verificação TLS e controlos de segurança.
+
+Mais documentação: Manual prático do xCurl 1.1.0
+---
+
+### Français
+
+`xCurl` est un package Absolut Office de transport HTTPS et de gestion des politiques, destiné aux projets PHP génériques.
+
+Il a été conçu pour les environnements dans lesquels les hébergeurs, FAI, proxies, pare-feu ou certaines configurations serveur limitent ou désactivent une partie des mécanismes réseau normalement disponibles en PHP.
+
+Son objectif est de fournir une couche de transport HTTPS résiliente, capable de sélectionner progressivement différents backends de connexion compatibles selon les capacités disponibles à l'exécution. Au lieu de dépendre d'un seul mécanisme réseau, `xCurl` peut utiliser cURL, les streams HTTPS de PHP ou un socket TLS direct lorsque le backend privilégié n'est pas disponible.
+
+L'objectif est simple : rendre les communications HTTPS sortantes plus fiables dans les environnements PHP contraints ou configurés de manière hétérogène, tout en conservant des politiques de transport explicites, la vérification TLS et les contrôles de sécurité.
+
+Documentation complémentaire : Manuel pratique de xCurl 1.1.0
+## Install
+
+xCurl requires PHP **^8.5.12**.
+
+The current stable release is **v1.1.0**.
+
+### Via Composer
+
+Install xCurl through Packagist:
+
+```bash
+composer require absolutoffice/xcurl:^1.1
+```
+
+### Directly from GitHub VCS
+
+To install the stable release directly from GitHub:
 
 ```bash
 composer config repositories.xcurl vcs https://github.com/absolutoffice/xcurl.git
 composer require absolutoffice/xcurl:1.1.0 --no-plugins --no-scripts
-composer check-platform-reqs --no-dev
 ```
 
-The [installation guide](docs/INSTALLATION.md) also covers verified local path installation and the `dev-main` development option. Without a VCS repository override, `composer require absolutoffice/xcurl:^1.1` is valid **only after Packagist has indexed the release**. This checkout does not establish tag publication, indexing, or successful remote installation.
+### Load xCurl
+
+Load Composer's generated autoloader from your application bootstrap:
 
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
@@ -20,13 +83,95 @@ require_once __DIR__ . '/vendor/autoload.php';
 use AbsolutOffice\XCurl\HttpTransportFactory;
 
 $transport = HttpTransportFactory::create();
-$response = $transport->request('GET', 'https://example.com/', [], 30);
+
+$response = $transport->request(
+    'GET',
+    'https://example.com/',
+    [],
+    30
+);
+
 echo $response->statusCode, "\n";
 ```
 
-Composer provides PSR-4 autoloading under `AbsolutOffice\XCurl\`. The runtime has no Composer dependency beyond PHP itself; contributor tools are not consumer dependencies. cURL is optional; HTTPS streams require the HTTPS wrapper, and the direct socket requires TLS/OpenSSL support.
+Composer provides PSR-4 autoloading under `AbsolutOffice\XCurl\`.
 
-For standalone deployment instead, keep `autoload.php` alongside `src/` and replace the require above with `require_once __DIR__ . '/xcurl/autoload.php';` (adjust the checkout path). The same PHP minimum applies.
+xCurl has no mandatory Composer runtime dependency other than PHP itself. cURL is optional; HTTPS streams require the PHP HTTPS wrapper, and the direct socket transport requires TLS/OpenSSL support.
+
+## Verify the installation
+
+To verify that the installed package and the real runtime environment satisfy the required PHP version and platform requirements, run:
+
+```bash
+composer check-platform-reqs --no-dev
+```
+
+You can also perform a runtime capability check:
+
+```php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use AbsolutOffice\XCurl\HttpTransportFactory;
+
+$diagnostics = HttpTransportFactory::diagnostics();
+
+print_r($diagnostics);
+```
+
+This reports the HTTPS transport capabilities detected by xCurl in the current PHP runtime.
+
+For a basic HTTPS request test:
+
+```php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use AbsolutOffice\XCurl\HttpTransportFactory;
+
+$transport = HttpTransportFactory::create();
+
+$response = $transport->request(
+    'GET',
+    'https://example.com/',
+    [],
+    30
+);
+
+echo 'HTTP status: ', $response->statusCode, PHP_EOL;
+```
+
+A successful response confirms that xCurl can select an available HTTPS transport and complete a request in the current environment.
+
+## Install and try it
+
+To inspect, test, or contribute to xCurl, clone the repository:
+
+```bash
+git clone https://github.com/absolutoffice/xcurl.git
+cd xcurl
+composer install
+```
+
+Run the available project checks:
+
+```bash
+composer test
+```
+
+For an isolated Composer consumer/archive check:
+
+```bash
+php tests/composer-consumer.php
+```
+
+For a PHP syntax check:
+
+```bash
+find src tests -name '*.php' -print0 | xargs -0 -n1 php -l
+```
 
 ## Redirects and downloads
 
