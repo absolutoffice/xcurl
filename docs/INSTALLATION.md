@@ -1,6 +1,6 @@
 # Install xCurl with Composer
 
-Use PHP **^8.5.12** (at least 8.5.12, below 9.0). Composer installation of the local checkout is verified; publishing, Packagist registration, tags and releases are separate maintainer actions, not performed by these checks.
+For **xCurl 1.1.1**, use PHP **8.4.27 through 8.4.x** or **8.5.12 through 8.5.x** (`>=8.4.27 <8.5 || >=8.5.12 <8.6`). PHP 8.4.26 and 8.5.11 are unsupported. Composer installation of the local checkout is verified; publishing, Packagist registration, tags and releases are separate maintainer actions, not performed by these checks.
 
 ## Local checkout: available now
 
@@ -43,6 +43,12 @@ $transport = \AbsolutOffice\XCurl\HttpTransportFactory::create();
 
 The factory needs an available HTTPS backend: optional cURL, PHP HTTPS streams, or TLS/OpenSSL sockets. Composer installation alone does not prove network/TLS capability.
 
+## Candidate v1.1.1: local checkout only
+
+The `VERSION` file records `1.1.1` for this **unpublished candidate**. No `v1.1.1` tag or Packagist availability is assumed. Use the local path repository above for testing and keep PHP platform checks on the real runtime. After publication, maintainers may use the GitHub VCS route with `absolutoffice/xcurl:1.1.1` only when the corresponding tag exists.
+
+The four xCurl 1.1.0 practical PDF manuals are retained unchanged as historical documentation; this page defines the currently proposed PHP requirements for 1.1.1.
+
 ## Stable v1.1.0 through GitHub VCS: after tag publication
 
 Once maintainers publish the `v1.1.0` Git tag, run these commands in a consumer project to select that stable version without Packagist registration:
@@ -72,18 +78,18 @@ composer require absolutoffice/xcurl:^1.1 --no-plugins --no-scripts
 composer check-platform-reqs --no-dev
 ```
 
-The root `VERSION` file now records `1.1.0`, but neither it nor the changelog creates stable Composer metadata. Composer versions come from VCS branches/tags; the library deliberately has no root `version` field. Tag publication and Packagist indexing must be confirmed separately; these checks establish neither.
+Historical 1.1.0 installation notes remain below; the root `VERSION` file in this checkout now records `1.1.1`, but neither it nor the changelog creates stable Composer metadata. Composer versions come from VCS branches/tags; the library deliberately has no root `version` field. Tag publication and Packagist indexing must be confirmed separately; these checks establish neither.
 
 ## Consumers versus contributors
 
-- Consumers receive no xCurl `require-dev` tools. The only runtime Composer requirement is PHP `^8.5.12`.
+- Consumers receive no xCurl `require-dev` tools. The only runtime Composer requirement in 1.1.1 is PHP `>=8.4.27 <8.5 || >=8.5.12 <8.6`.
 - Contributors retain PHP-CS-Fixer, phpDocumentor, PHPStan and PHPUnit constraints. An isolated `composer update --dry-run --no-install --no-plugins --no-scripts --no-interaction --no-ansi` resolved all four tool constraints (70 packages); it did not install them or establish their execution coverage.
-- The library's `config.platform.php = 8.5.12` sets its contributor solver baseline. Dependency packages' config does not configure a consumer's platform; `require.php` enforces the consumer minimum.
+- The library's `config.platform.php = 8.4.27` sets its contributor solver baseline. Dependency packages' config does not configure a consumer's platform; `require.php` enforces the consumer minimum.
 - A simulated platform does not upgrade PHP. Run `composer check-platform-reqs --no-dev` on the actual deployment runtime; do not bypass requirements with `--ignore-platform-reqs`.
 
 ## Reproduce local verification
 
-From the checkout, with PHP 8.5.12 and Composer 2.10.3 (the tested versions):
+From the 1.1.1 checkout, validation was performed on Vulcano with PHP 8.4.27 and PHP 8.5.12 (Composer 2.11.1). Re-run all commands in each target runtime before release:
 
 ```bash
 composer validate --strict --no-check-lock
@@ -96,12 +102,12 @@ git diff --check
 
 `tests/composer-consumer.php` uses `composer` on `PATH`. Set `XCURL_COMPOSER=/absolute/path/to/composer` for another executable, or `XCURL_COMPOSER=/absolute/path/to/composer.phar` to launch a PHAR using the running PHP binary. The value is one executable path, not a shell command or flags.
 
-The dependency-free test creates a unique system-temporary tree, isolates Composer home/cache/config, disables Packagist/network access, and cleans only its owned tree in `finally`. It prints exact subprocess commands and output. It runs `composer install --no-dev --no-plugins --no-scripts --no-interaction --no-ansi` twice: simulated PHP 8.5.11 must fail specifically on xCurl's PHP requirement, while 8.5.12 must install a non-symlink path mirror. A fresh PHP process loads only installed `vendor/autoload.php` and exercises the public client/request/response API with a fake transport. No checkout `vendor/` or lock file is created.
+The dependency-free test creates a unique system-temporary tree, isolates Composer home/cache/config, disables Packagist/network access, and cleans only its owned tree in `finally`. It prints exact subprocess commands and output. It runs `composer install --no-dev --no-plugins --no-scripts --no-interaction --no-ansi` for four simulated platforms: PHP 8.4.26 and 8.5.11 must be rejected by xCurl requirements, whereas PHP 8.4.27 and 8.5.12 must install non-symlink path mirrors. A fresh PHP process loads only installed `vendor/autoload.php` and exercises the public client/request/response API with a fake transport. No checkout `vendor/` or lock file is created.
 
 Separately, it runs `composer archive --format=zip --dir=<owned-temp> --file=xcurl --no-plugins --no-scripts --no-interaction --no-ansi`, enumerates the actual ZIP, and checks runtime/license/test bytes against the checkout. Both `archive.exclude` and `.gitattributes` export rules exclude local indexes (`.atl`, `.codegraph`), `odd`, vendor/cache/output directories, lock/auth files, environment files, PDFs and key material. The runtime, `LICENSE`, `COPYING`, tests and Composer test script remain distributed. Export exclusions are not a replacement for keeping secrets out of Git.
 
-Coverage is local mirrored-source installation plus real archive content validation, not installation from that ZIP, GitHub or Packagist. No real HTTPS integration or developer-tool suite is exercised by this smoke test. Historical PHP 8.5.11 QA statements remain historical.
+The `tests/composer-consumer.php` smoke test covers a local mirrored-source installation and actual archive-content validation; it does not itself install from the archive. Separately, the final QA extracted the distribution ZIP and successfully installed it in isolated Composer path-repository consumers under real PHP 8.4.27 and 8.5.12, verifying PSR-4 loading. Neither check establishes remote installation from GitHub or Packagist, nor exhaustive real HTTPS/TLS integration. Historical PHP 8.5.11 QA statements remain historical.
 
 ## Standalone fallback
 
-Keep `autoload.php` next to `src/` and load `require_once '/path/to/xcurl/autoload.php';` instead of Composer's autoloader. Deploy `LICENSE` and `COPYING` with the library. PHP `^8.5.12` remains the supported minimum, but the standalone autoloader does not perform Composer's platform checks.
+Keep `autoload.php` next to `src/` and load `require_once '/path/to/xcurl/autoload.php';` instead of Composer's autoloader. Deploy `LICENSE` and `COPYING` with the library. PHP `>=8.4.27 <8.5 || >=8.5.12 <8.6` is the supported requirement for 1.1.1, but the standalone autoloader does not perform Composer's platform checks.

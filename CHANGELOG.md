@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.1 - Unreleased (05/11/2026)
+
+### PHP 8.4 security-baseline compatibility
+
+- Allowed PHP `>=8.4.27 <8.5 || >=8.5.12 <8.6`, excluding PHP 8.4.26, PHP 8.5.11 and future PHP branches pending review.
+- Changed contributor Composer platform baseline to PHP 8.4.27; no mandatory runtime dependencies added.
+- Updated isolated Composer consumer tests to exercise rejection of 8.4.26/8.5.11 and acceptance of 8.4.27/8.5.12.
+- Retained `src/`, its public API, namespaces, custom transport injection and transport/security behavior unchanged relative to 1.1.0.
+- QA observed on Vulcano: PHP 8.4.27 and 8.5.12 regression tests passed; PHPStan level 10 on `src/` passed with `treatPhpDocTypesAsCertain: false`; PHP-CS-Fixer `@PER-CS3.0` on `src/` passed under PHP 8.4.27. Composer boundary checks passed with simulated platforms.
+- Subsequent Vulcano QA completed: test formatting corrected; PHP-CS-Fixer found zero remaining issues on `src/` and `tests/`; syntax, PHPStan level 10, independent Composer installs and platform checks passed with PHP 8.4.27/8.5.12; the distribution ZIP and consumer installations from the extracted ZIP passed. See [1.1.1 release notes](docs/releases/1.1.1.md). The tag and publication remain maintainer actions.
+
 ## 1.1.0 - 25/10/2026
 
 ### Composer distribution and ownership-safe downloads

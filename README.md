@@ -52,9 +52,10 @@ L'objectif est simple : rendre les communications HTTPS sortantes plus fiables d
 Documentation complémentaire : Manuel pratique de xCurl 1.1.0
 ## Install
 
-xCurl requires PHP **^8.5.12**.
+xCurl 1.1.1 requires PHP **8.4.27+ (below 8.5)** or **8.5.12+ (below 8.6)**.
+Composer constraint: `>=8.4.27 <8.5 || >=8.5.12 <8.6`. PHP 8.4.26, 8.5.11 and future PHP 8.6 releases are not admitted.
 
-The current stable release is **v1.1.0**.
+This checkout is **v1.1.1** (release candidate, not yet published). The published v1.1.0 release is preserved; v1.1.1 must not be installed as a stable tag until maintainers publish it.
 
 ### Via Composer
 
@@ -72,6 +73,12 @@ To install the stable release directly from GitHub:
 composer config repositories.xcurl vcs https://github.com/absolutoffice/xcurl.git
 composer require absolutoffice/xcurl:1.1.0 --no-plugins --no-scripts
 ```
+
+### xCurl 1.1.1 before publication
+
+To test this checkout in a consumer project, use a Composer path repository with `"symlink": false` and an explicit local version mapping. See [installation instructions](docs/INSTALLATION.md). Do not require `1.1.1` from GitHub or Packagist until the tag and package availability have been verified.
+
+The four existing 1.1.0 practical manuals remain historical references; the PHP support policy above supersedes their version requirements for 1.1.1.
 
 ### Load xCurl
 

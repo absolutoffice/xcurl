@@ -1,6 +1,6 @@
 # Documentation
 
-Start with the [current installation guide](INSTALLATION.md) for PHP ^8.5.12, local Composer installation, conditional GitHub/Packagist routes and reproducible validation. The [project README](../README.md) covers the current API example, transport selection and standalone fallback.
+Start with the [current installation guide](INSTALLATION.md) for PHP `>=8.4.27 <8.5 || >=8.5.12 <8.6`, local Composer installation, conditional GitHub/Packagist routes and reproducible validation. The [project README](../README.md) covers the current API example, transport selection and standalone fallback.
 
 ## Reference material
 

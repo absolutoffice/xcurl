@@ -52,11 +52,11 @@ function cleanOwnedTree(string $directory): void
     check(rmdir($directory), 'Cannot remove owned temporary root.');
 }
 
-check(PHP_VERSION_ID >= 80512, 'Run with actual PHP >=8.5.12; platform simulation does not replace the runtime.');
+check(PHP_VERSION_ID >= 80427 && PHP_VERSION_ID < 80600 && (PHP_VERSION_ID < 80500 || PHP_VERSION_ID >= 80512), 'Run with supported PHP 8.4.27+ or 8.5.12+; platform simulation does not replace the runtime.');
 $root = dirname(__DIR__);
 $manifest = json_decode(file_get_contents($root . '/composer.json'), true, flags: JSON_THROW_ON_ERROR);
-check($manifest['require'] === ['php' => '^8.5.12'], 'Unexpected runtime requirements.');
-check($manifest['config']['platform']['php'] === '8.5.12', 'Unexpected contributor platform.');
+check($manifest['require'] === ['php' => '>=8.4.27 <8.5 || >=8.5.12 <8.6'], 'Unexpected runtime requirements.');
+check($manifest['config']['platform']['php'] === '8.4.27', 'Unexpected contributor platform.');
 check(!isset($manifest['version']), 'Package versions must come from VCS, not a root version field.');
 // Fail before any mirror can copy local data if export rules drift from archive rules.
 $attributes = file($root . '/.gitattributes', FILE_IGNORE_NEW_LINES);
@@ -115,7 +115,7 @@ try {
         'url' => $root,
         'options' => ['symlink' => false, 'versions' => ['absolutoffice/xcurl' => 'dev-consumer-test']],
     ];
-    foreach (['8.5.11', '8.5.12'] as $platform) {
+    foreach (['8.4.26', '8.4.27', '8.5.11', '8.5.12'] as $platform) {
         $consumer = $temporary . '/php-' . $platform;
         check(mkdir($consumer, 0700), 'Cannot create consumer directory.');
         writeJson($consumer . '/composer.json', [
@@ -125,11 +125,15 @@ try {
             'config' => ['platform' => ['php' => $platform], 'allow-plugins' => false],
         ]);
         [$status, $output] = run([...$composer, 'install', '--no-dev', ...$flags], $consumer, $environment, $temporary);
-        if ($platform === '8.5.11') {
-            check($status === 2, 'Expected dependency solver failure for PHP 8.5.11.');
-            check((bool) preg_match('/absolutoffice\/xcurl[^\r\n]*requires php \^8\.5\.12[^\r\n]*8\.5\.11/', $output), 'Failure was not caused by xCurl PHP ^8.5.12 rejecting 8.5.11.');
+        if (in_array($platform, ['8.4.26', '8.5.11'], true)) {
+            check($status === 2, 'Expected dependency solver failure for PHP ' . $platform);
+            check(
+                str_contains($output, 'absolutoffice/xcurl')
+                && str_contains($output, 'requires php'),
+                'Failure was not attributed to the xCurl PHP requirement.',
+            );
             check(!file_exists($consumer . '/vendor/autoload.php'), 'Rejected consumer unexpectedly installed.');
-            echo "PASS: simulated PHP 8.5.11 rejected specifically by xCurl PHP requirement.\n";
+            echo "PASS: simulated PHP {$platform} rejected specifically by xCurl PHP requirement.\n";
             continue;
         }
         check($status === 0, 'PHP 8.5.12 consumer install failed.');
